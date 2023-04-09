@@ -98,3 +98,13 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 end
+
+# Helper Methods
+def bill_date(year, day)
+  allow(Billing).to receive(:bill_date).and_return(Date.new(year, day))
+end
+
+
+
+
+

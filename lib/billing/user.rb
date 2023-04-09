@@ -8,24 +8,17 @@ module Billing
       @deactivated_on ||= super.nil?? nil : Date.strptime(super, '%m-%d-%Y')
     end
 
-    def billable_days(bill_date)
-      case Availabilty.new(self, bill_date).type
+    def billable_days
+      case Availabilty.new(self).type
       when :full
-        days_in_month(bill_date)
+        Billing.days_in_month
       when :invalid
         0
       when :deactivated
         deactivated_on.day - 1
       when :activated
-        1 + days_in_month(bill_date) - activated_on.day
+        1 + Billing.days_in_month - activated_on.day
       end
-    end
-
-    private
-
-    # this could be moved into a date object
-    def days_in_month(bill_date)
-      (bill_date.next_month - 1).day
     end
   end
 end

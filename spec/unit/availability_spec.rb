@@ -10,25 +10,29 @@ RSpec.describe Billing::Availabilty do
   end
 
   specify "when billing date is out of bounds" do
-    result = Billing::Availabilty.new(user, Date.new(2021, 1)).type
+    bill_date(2021, 1)
+    result = Billing::Availabilty.new(user).type
 
     expect(result).to eq :invalid
   end
 
   specify "prorated due to deactivated during billing date" do
-    result = Billing::Availabilty.new(user, Date.new(2023, 4)).type
+    bill_date(2023, 4)
+    result = Billing::Availabilty.new(user).type
 
     expect(result).to eq :deactivated
   end
 
   specify "prorated due to activated during billing date" do
-    result = Billing::Availabilty.new(user, Date.new(2022, 4)).type
+    bill_date(2022, 4)
+    result = Billing::Availabilty.new(user).type
 
     expect(result).to eq :activated
   end
 
   specify "billing the full month" do
-    result = Billing::Availabilty.new(user, Date.new(2022, 5)).type
+    bill_date(2022, 5)
+    result = Billing::Availabilty.new(user).type
 
     expect(result).to eq :full
   end

@@ -11,31 +11,35 @@ RSpec.describe Billing::User do
 
   context "Billiable Dates" do
     it "tallys all days in a month when valid" do
+      bill_date(2022, 6)
       user = Billing::User.new(attr)
-      result = user.billable_days(Date.new(2022, 06))
+      result = user.billable_days
 
       expect(result).to eq 30
     end
 
     context "pro rates" do
       specify "when activated in billing month" do
+        bill_date(2022, 4)
         user = Billing::User.new(attr)
-        result = user.billable_days(Date.new(2022, 04))
+        result = user.billable_days
 
         expect(result).to eq 28
       end
 
-      specify "when daactivated in billing month" do
+      specify "when deactivated in billing month" do
+        bill_date(2023, 4)
         user = Billing::User.new(attr)
-        result = user.billable_days(Date.new(2023, 04))
+        result = user.billable_days
 
         expect(result).to eq 2
       end
     end
 
     it "returns 0 if billing month of user is deactivated" do
+      bill_date(2024, 4)
       user = Billing::User.new(attr)
-      result = user.billable_days(Date.new(2024, 04))
+      result = user.billable_days
 
       expect(result).to eq 0
     end
