@@ -27,6 +27,6 @@ module Billing
   end
 
   def days_in_month
-  (bill_date.next_month - 1).day
+    (bill_date.next_month - 1).day
   end
 end
